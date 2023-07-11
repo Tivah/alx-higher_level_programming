@@ -1,9 +1,11 @@
 #!/usr/bin/python3
 """
-This program creates a empty class
+Contains the class BaseGeometry
 """
 
 
-class BaseGeometry():
-    """BaseGeometry is a empty class"""
-    pass
+class BaseGeometry:
+    """A class with public attribute area"""
+    def area(self):
+        """raises an exception when called"""
+        raise Exception("area() is not implemented")
