@@ -1,26 +1,24 @@
 #!/usr/bin/node
 
-const request = require('request');
-const url = process.argv[2];
+// script that prints all characters of a Star Wars movie:
 
-request(url, (err, response, body) => {
-  if (err) {
-    console.log(err);
-  } else if (response.statusCode === 200) {
-    const dic = {};
-    const tasks = JSON.parse(body);
-    for (const i in tasks) {
-      const task = tasks[i];
-      if (task.completed === true) {
-        if (dic[task.userId] === undefined) {
-          dic[task.userId] = 1;
-        } else {
-          dic[task.userId]++;
-        }
-      }
+const req = require('request');
+
+const id = process.argv[2];
+const url = `https://swapi-api.alx-tools.com/api/films/${id}`;
+
+req(url, (err, res) => {
+  if (err) { console.log(err); } else if (res.statusCode === 200) {
+    const body = JSON.parse(res.body);
+    const charArr = body.characters;
+
+    for (let i = 0; i < charArr.length; i++) {
+      req(charArr[i], (e, r) => {
+        if (e) { console.log(e); } else if (r.statusCode === 200) {
+          const body = JSON.parse(r.body);
+          console.log(body.name);
+        } else { console.log('code: ' + r.statusCode); }
+      });
     }
-    console.log(dic);
-  } else {
-    console.log('Error ' + response.statusCode);
-  }
+  } else { console.log('code: ' + res.statusCode); }
 });
